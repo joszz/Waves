@@ -87,16 +87,12 @@
         };
     }
 
-    function convertStyle(styleObj) {
-        var style = '';
-
+    function convertStyle(element, styleObj) {
         for (var prop in styleObj) {
             if (styleObj.hasOwnProperty(prop)) {
-                style += (prop + ':' + styleObj[prop] + ';');
+				$(element).css(prop, styleObj[prop]);
             }
         }
-
-        return style;
     }
 
     var Effect = {
@@ -160,7 +156,7 @@
             };
 
             ripple.classList.add('waves-notransition');
-            ripple.setAttribute('style', convertStyle(rippleStyle));
+			convertStyle(ripple, rippleStyle);
             ripple.classList.remove('waves-notransition');
 
             // Scale the ripple
@@ -177,7 +173,7 @@
             rippleStyle['-o-transition-duration']      = duration + 'ms';
             rippleStyle['transition-duration']         = duration + 'ms';
 
-            ripple.setAttribute('style', convertStyle(rippleStyle));
+			convertStyle(ripple, rippleStyle);
         },
 
         hide: function(e, element) {
@@ -229,9 +225,11 @@
             var color           = elementStyle.color;
             var backgroundColor = elementStyle.backgroundColor;
 
-            wrapper.setAttribute('style', 'color:' + color + ';background:' + backgroundColor);
-            element.setAttribute('style', 'background-color:rgba(0,0,0,0);');
-
+			$(wrapper).css({
+				color: color,
+				background: backgroundColor
+			});
+			element.css('background-color', 'rgba(0,0,0,0)');
         },
 
         // Wrap <img> tag so it can perform the effect
@@ -287,7 +285,7 @@
 
         setTimeout(function() {
 
-            var style = {
+            $(ripple).css({
                 top: relativeY + 'px',
                 left: relativeX + 'px',
                 opacity: '0',
@@ -302,9 +300,7 @@
                 '-ms-transform': scale + ' ' + translate,
                 '-o-transform': scale + ' ' + translate,
                 'transform': scale + ' ' + translate
-            };
-
-            ripple.setAttribute('style', convertStyle(style));
+            });
 
             setTimeout(function() {
                 try {
